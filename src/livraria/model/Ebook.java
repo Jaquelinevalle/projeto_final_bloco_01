@@ -5,6 +5,7 @@ public class Ebook extends Livraria {
 	private String format;
 	
 	public Ebook(String title, String author, double price, double fileSize, String format) {
+		super.Book(title, author, price);
 		this.fileSize = fileSize; 
 		this.format = format;
 	}

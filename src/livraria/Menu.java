@@ -1,15 +1,17 @@
 package livraria;
 
 import java.util.Scanner;
+
+import livraria.controller.BookController;
 import livraria.model.Ebook;
 import livraria.model.Livraria;
-import livraria.reporitory.*;
-import livraria.reporitory.*;
-
+import livraria.reporitory.BookRepository;
 import livraria.util.Cores;
 
 public class Menu {
-	private static livraria.reporitory bookRepo = new BookRepositoryImpl()
+	private static BookRepository bookRepo = new BookRepository();
+	private static BookController bookcontrol = new BookController(bookRepo);
+	
 	
 	
 	public static void main(String[] args) {
@@ -20,8 +22,7 @@ public class Menu {
 
 		do {
 
-			System.out.println(Cores.TEXT_BLUE + Cores.ANSI_BLACK_BACKGROUND
-					+ "\nBem-vindo à Livraria J.V !");
+			System.out.println("\nBem-vindo à Livraria J.V !");
 			System.out.println("1. Adicionar Livro");
 			System.out.println("2. Listar Livros");
 			System.out.println("3. Fazer Pedido");
@@ -41,17 +42,16 @@ public class Menu {
 
 			switch (opcao) {
 			case 1:
-				System.out.println(Cores.TEXT_WHITE + "Digite o nome do livro");
-
+				addBook(leia);
 				break;
 			case 2:
-				System.out.println(Cores.TEXT_WHITE + "O livro foi adicionado");
+				listBook();
 				break;
 			case 3:
-				System.out.println(Cores.TEXT_WHITE + "Conclua seu pedido");
+				makeOrder(leia);
 				break;
 			case 4:
-				System.out.println(Cores.TEXT_WHITE + "A lista está aqui");
+				listOrders();
 
 				break;
 			case 5:
@@ -69,6 +69,7 @@ public class Menu {
 	
 	private static void addBook(Scanner scanner) {
 		System.out.print("Título: ");
+		scanner.skip("\\R?");
 		String title = scanner.nextLine(); 
 		System.out.print("Autor: ");
 		String author = scanner.nextLine(); 
@@ -80,17 +81,32 @@ public class Menu {
 		double fileSize = scanner.nextDouble();
 		scanner.nextLine();
 		
-		System.out.print("Format: "); 
+		System.out.print("Formato: "); 
 		String format = scanner.nextLine();
 		
 		Livraria book = new Ebook(title, author, price, fileSize, format);
-		bookRepo.addBook(book);
+		BookController.addBook(book);
 		System.out.println("Livro adicionado com sucesso!");
 	}
 	
 	private static void listBook() {
-		bookRepo.listBooks();
+		BookController.listBooks();
 	}
+	private static void makeOrder(Scanner scanner) {
+	System.out.print("Título do livro para pedido: ");
+	String title = scanner.nextLine();
+	Livraria book = BookController.findBookByTitle(title);
+	if (book != null) {
+		System.out.println("Pedido realizado para o livro: " + book.getTitle()); 
+		} else {
+			System.out.println("Livro não encontrado.");
+		}
+	
+	}
+private static void listOrders() {
+	BookController.listBooks();
+}
+	
 	
 	public static void sobre() {
 			System.out.println("\n*********************************************************");

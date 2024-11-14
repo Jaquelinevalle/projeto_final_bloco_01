@@ -1,33 +1,39 @@
 package livraria.controller;
 
 import livraria.model.Livraria;
-import livraria.reporitory.LivrariaRepository;
 
+import livraria.reporitory.BookRepository;
 
-public class BookController implements LivrariaRepository {
-
-	@Override
-	public void addBook(Livraria book) {
-		
-		
-	}
-
-	@Override
-	public void removeBook(Livraria book) {
-		
-		
-	}
-
-	@Override
-	public Livraria findBookByTitle(String title) {
+public class BookController {
+	private static BookRepository bookRepo;
 	
-		return null;
+	public BookController(BookRepository bookRepo) {
+		this.bookRepo = bookRepo;
+	}
+	
+	public static void addBook(Livraria book) {
+		bookRepo.addBook(book);
+
 	}
 
-	@Override
-	public void listBooks() {
+	public void removeBook(Livraria book) {
+		bookRepo.removeBook(book);
+		
+	}
+	
+	public static Livraria findBookByTitle(String title) {
+		return bookRepo.findBookByTitle(title);
+	}
+
+	public static  void listBooks() {
+		bookRepo.listBooks();
+	   
+		
+	}
+
+
 		
 		
 	}
 
-}
+
